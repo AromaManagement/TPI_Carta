@@ -45,7 +45,7 @@ const FilterChip = memo(function FilterChip({
     alignItems: "center",
     gap: 8,
     borderRadius: 8,
-    border: isActive ? "2px solid #3b82f6" : "2px solid #e5e7eb",
+    border: isActive ? "2px solid #0c2b5eff" : "2px solid #e5e7eb",
     background: isActive ? "#eff6ff" : "#ffffff",
     color: isActive ? "#1e40af" : "#6b7280",
     cursor: disabled ? "not-allowed" : "pointer",
@@ -86,7 +86,6 @@ FilterChip.displayName = "FilterChip";
 
 const FilterChipList = memo(function FilterChipList({
   chips,
-  activeId,
   size = "medium",
   onSelect,
   className,
@@ -109,21 +108,19 @@ const FilterChipList = memo(function FilterChipList({
     scrollBehavior: "smooth",
   };
 
-  const scrollbarStyle = `
-    ::-webkit-scrollbar {
-      height: 4px;
+const scrollbarStyle = `
+    [role="tablist"] {
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
     }
-    ::-webkit-scrollbar-track {
-      background: #f1f5f9;
+    [role="tablist"]::-webkit-scrollbar {
+        display: none; /* Chrome, Safari, Opera */
+        height: 0;
+        width: 0;
     }
-    ::-webkit-scrollbar-thumb {
-      background: #cbd5e1;
-      border-radius: 2px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #94a3b8;
-    }
-  `;
+`;
+
+  const [activeId, setActiveId] = React.useState<string | number | null>(null);
 
   return (
     <>
@@ -140,7 +137,7 @@ const FilterChipList = memo(function FilterChipList({
             count={chip.count}
             isActive={activeId === chip.id}
             size={size}
-            onClick={() => handleSelect(chip.id)}
+            onClick={() => {handleSelect(chip.id); setActiveId(chip.id);}}
           />
         ))}
       </div>
