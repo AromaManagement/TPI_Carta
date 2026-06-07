@@ -1,10 +1,9 @@
-import Image from "next/image";
-import MenuView from "./views/menuView";
+import { getCartaCompleta } from "@/controllers/carta.controller";
+import { MenuView } from "@/views/menu-view";
 
-export default function Home() {
-  return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <MenuView />
-    </div>
-  );
+export const dynamic = "force-dynamic";
+
+export default async function CartaPage() {
+  const carta = await getCartaCompleta();
+  return <MenuView carta={carta} />;
 }
