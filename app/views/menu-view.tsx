@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import { UtensilsCrossed, X } from "lucide-react";
+import { AlertTriangleIcon, UtensilsCrossed, X } from "lucide-react";
 import { formatCurrency } from "@/lib/format";
 import type { Carta, Plato } from "@/models";
 
@@ -70,7 +70,15 @@ function PlatoSheet({ plato, onClose }: { plato: Plato; onClose: () => void }) {
 
         {/* Scrollable content */}
         <div className="overflow-y-auto px-5 pb-10 pt-5">
-          <h2 className="text-xl font-bold leading-snug">{plato.nombre}</h2>
+          <div className="flex items-start gap-3">
+            <h2 className="flex-1 text-xl font-bold leading-snug">{plato.nombre}</h2>
+            {plato.disponible === false && (
+              <span className="mt-0.5 inline-flex shrink-0 items-center gap-1 rounded-full bg-red-100 px-2.5 py-1 text-xs font-medium text-red-700">
+                <AlertTriangleIcon className="size-3" />
+                Sin stock
+              </span>
+            )}
+          </div>
           {plato.detalle && (
             <p className="text-muted-foreground mt-2 leading-relaxed">
               {plato.detalle}
@@ -116,7 +124,14 @@ function PlatoRow({ plato, onClick }: { plato: Plato; onClick: () => void }) {
       </div>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <p className="font-semibold leading-snug">{plato.nombre}</p>
+        <div className="flex items-center gap-2">
+          <p className="min-w-0 flex-1 font-semibold leading-snug">{plato.nombre}</p>
+          {plato.disponible === false && (
+            <span className="shrink-0 rounded-full bg-red-100 px-2 py-0.5 text-[10px] font-medium text-red-700">
+              Sin stock
+            </span>
+          )}
+        </div>
         {plato.detalle && (
           <p className="text-muted-foreground mt-0.5 line-clamp-2 text-sm leading-snug">
             {plato.detalle}
@@ -143,7 +158,7 @@ export function MenuView({ carta }: { carta: Carta }) {
   seccionesRef.current = secciones;
 
   const programmaticRef = useRef(false);
-  const lockTimerRef = useRef<ReturnType<typeof setTimeout>>();
+  const lockTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   useEffect(() => {
     function onScroll() {

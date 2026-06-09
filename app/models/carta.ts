@@ -3,6 +3,14 @@ export interface Imagen {
   imagenSi: string;
 }
 
+export interface PlatoIngrediente {
+  articuloId: number;
+  nombre: string;
+  cantidad: number;
+  unidadMedida: string | null;
+  stockActual: number;
+}
+
 export interface Plato {
   id: number;
   seccionId: number;
@@ -11,6 +19,9 @@ export interface Plato {
   detalle: string | null;
   imagenId: number | null;
   imagen?: Imagen | null;
+  ingredientes?: PlatoIngrediente[];
+  /** true = stock ok, false = falta stock, null = sin receta definida */
+  disponible?: boolean | null;
 }
 
 export interface Seccion {
